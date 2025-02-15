@@ -1,5 +1,9 @@
 import pytest
 
+from src import resp
+from src.resp.serialization import serialize_simple_string
+from src.resp.parser import parse_simple_string
+
 # Simple Strings
 class TestSimpleString:
     # Serialize tests
@@ -7,7 +11,7 @@ class TestSimpleString:
         assert serialize_simple_string("OK") == b"+OK\r\n"
 
     def test_serialize_simple_string_empty(self):
-        assert serialize_simple_string_empty("") == b"+\r\n"
+        assert serialize_simple_string("") == b"+\r\n"
 
     def test_serialize_simple_string_invalid_input(self):
         with pytest.raises(TypeError):
@@ -19,7 +23,7 @@ class TestSimpleString:
         assert parse_simple_string(b"+OK\r\n") == "OK"
 
     def test_parse_simple_string_empty(self):
-        assert parse_simple_string_empty(b"+\r\n") == ""
+        assert parse_simple_string(b"+\r\n") == ""
 
     def test_parse_simple_string_invalid_prefix(self):
         with pytest.raises(ValueError):
@@ -33,10 +37,10 @@ class TestBulkStrings:
         assert serialize_bulk_string("hello world") == b"$11\r\nhello world\r\n"
 
     def test_serialize_bulk_string_empty(self):
-        assert serialize_bulk_string_empty("") == b"$0\r\n\r\n"
+        assert serialize_bulk_string("") == b"$0\r\n\r\n"
 
     def test_serialize_bulk_string_null(self):
-        assert serialize_bulk_string_null(None) == b"$-1\r\n"
+        assert serialize_bulk_string(None) == b"$-1\r\n"
 
     def test_serialize_bulk_string_invalid_input(self):
         with pytest.raises(TypeError):
@@ -47,10 +51,10 @@ class TestBulkStrings:
         assert parse_bulk_string(b"$11\r\nhello world\r\n") == "hello world"
 
     def test_parse_bulk_string_empty(self):
-        assert parse_bulk_string_empty(b"$0\r\n\r\n") == ""
+        assert parse_bulk_string(b"$0\r\n\r\n") == ""
 
     def test_parse_bulk_string_null(self):
-        assert parse_bulk_string_null(b"$-1\r\n") is None
+        assert parse_bulk_string(b"$-1\r\n") is None
 
     def test_parse_bulk_string_invalid_prefix(self):
         with pytest.raises(ValueError):
