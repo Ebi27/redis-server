@@ -9,19 +9,19 @@ class TestSimpleString:
     def test_serialize_simple_string_empty(self):
         assert serialize_simple_string_empty("") == b"+\r\n"
 
-    def test_serialize_simple_string_invalid_input():
+    def test_serialize_simple_string_invalid_input(self):
         with pytest.raises(TypeError):
             serialize_simple_string(123)
 
     # Parse tests
 
     def test_parse_simple_string(self):
-        assert parse_simple_string(b"+OK\r\n") == "O
+        assert parse_simple_string(b"+OK\r\n") == "OK"
 
     def test_parse_simple_string_empty(self):
         assert parse_simple_string_empty(b"+\r\n") == ""
 
-    def test_parse_simple_string_invalid_prefix():
+    def test_parse_simple_string_invalid_prefix(self):
         with pytest.raises(ValueError):
             parse_simple_string(b"-OK\r\n")
 
@@ -38,7 +38,7 @@ class TestBulkStrings:
     def test_serialize_bulk_string_null(self):
         assert serialize_bulk_string_null(None) == b"$-1\r\n"
 
-    def test_serialize_bulk_string_invalid_input():
+    def test_serialize_bulk_string_invalid_input(self):
         with pytest.raises(TypeError):
             serialize_bulk_string(123)
 
@@ -52,7 +52,7 @@ class TestBulkStrings:
     def test_parse_bulk_string_null(self):
         assert parse_bulk_string_null(b"$-1\r\n") is None
 
-    def test_parse_bulk_string_invalid_prefix():
+    def test_parse_bulk_string_invalid_prefix(self):
         with pytest.raises(ValueError):
             parse_bulk_string(b"+hello world\r\n")
 
